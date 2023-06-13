@@ -12,6 +12,7 @@
             color: #155724;
             padding: 10px;
             margin-bottom: 20px;
+            display: none; /* Adicionado */
         }
     </style>
 </head>
@@ -31,7 +32,7 @@
             <tbody>
             </tbody>
         </table>
-        <a href="incluir.html" class="btn btn-primary">Incluir Filme</a>
+        <a href="incluir.html" class="btn btn-success">Incluir Filme</a>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
@@ -43,6 +44,7 @@
         if (mensagem) {
             const elMensagem = document.getElementById('mensagem');
             elMensagem.textContent = mensagem;
+            elMensagem.style.display = 'block';
             localStorage.removeItem('mensagem');
         }
     }
@@ -82,8 +84,10 @@
             });
     }
 
-    exibirMensagem();
-    carregarFilmes();
+    document.addEventListener('DOMContentLoaded', function () {
+        exibirMensagem();
+        carregarFilmes();
+    });
 </script>
 </body>
 </html>
