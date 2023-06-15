@@ -14,6 +14,11 @@
             margin-bottom: 20px;
             display: none;
         }
+
+        .empty-list-message {
+            font-size: 24px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -21,23 +26,23 @@
     <div class="row">
         <h1>Lista de Filmes</h1>
         <div id="mensagem" class="success-message"></div>
-        <table class="table table-striped" id="tabelaFilmes">
-            <thead>
-            <tr>
-                <th>Título</th>
-                <th>Gênero</th>
-                <th>Ano de lançamento</th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+        <div id="tabelaFilmesContainer">
+            <table class="table table-striped" id="tabelaFilmes">
+                <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Gênero</th>
+                    <th>Ano de lançamento</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <h1 id="emptyListMessage" class="empty-list-message"></h1>
         <a href="incluir.html" class="btn btn-success">Incluir Filme</a>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-        crossorigin="anonymous"></script>
 <script>
     function exibirMensagem() {
         const mensagem = localStorage.getItem('mensagem');
@@ -58,25 +63,33 @@
                 return response.json();
             })
             .then(function (filmes) {
-                const tabelaFilmes = document.getElementById('tabelaFilmes');
+                const tabelaFilmesContainer = document.getElementById('tabelaFilmesContainer');
+                const tabelaFilmes = tabelaFilmesContainer.querySelector('#tabelaFilmes');
                 const tbody = tabelaFilmes.querySelector('tbody');
+                const emptyListMessage = document.getElementById('emptyListMessage');
 
-                for (const filme of filmes) {
-                    const tr = document.createElement('tr');
+                if (filmes.length === 0) {
+                    tabelaFilmesContainer.style.display = 'none';
+                    emptyListMessage.textContent = 'Não há filmes na lista.';
+                } else {
+                    emptyListMessage.textContent = '';
+                    for (const filme of filmes) {
+                        const tr = document.createElement('tr');
 
-                    const tdTitulo = document.createElement('td');
-                    tdTitulo.textContent = filme.titulo;
-                    tr.appendChild(tdTitulo);
+                        const tdTitulo = document.createElement('td');
+                        tdTitulo.textContent = filme.titulo;
+                        tr.appendChild(tdTitulo);
 
-                    const tdGenero = document.createElement('td');
-                    tdGenero.textContent = filme.genero;
-                    tr.appendChild(tdGenero);
+                        const tdGenero = document.createElement('td');
+                        tdGenero.textContent = filme.genero;
+                        tr.appendChild(tdGenero);
 
-                    const tdLancamento = document.createElement('td');
-                    tdLancamento.textContent = filme.lancamento;
-                    tr.appendChild(tdLancamento);
+                        const tdLancamento = document.createElement('td');
+                        tdLancamento.textContent = filme.lancamento;
+                        tr.appendChild(tdLancamento);
 
-                    tbody.appendChild(tr);
+                        tbody.appendChild(tr);
+                    }
                 }
             })
             .catch(function (err) {
@@ -89,5 +102,8 @@
         carregarFilmes();
     });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
 </body>
 </html>
